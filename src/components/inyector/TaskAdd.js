@@ -54,7 +54,10 @@ const TaskAdd = (props) => {
   return (
     <View style={styles.mainWrapper}>
       <Pressable
-        style={styles.saveButton}
+        style={({disabled}) => [
+          styles.saveButton,
+          {backgroundColor: disabled ? '#4a4a4a' : '#1E0B7E'},
+        ]}
         onPress={handleSubmit}
         disabled={!isValid()}>
         <Text style={styles.buttonText}>GUARDAR CAMBIOS</Text>

@@ -1,14 +1,5 @@
-/* eslint-disable prettier/prettier */
-
 import React, {useState} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TextInput,
-  Button,
-  Pressable,
-} from 'react-native';
+import {Text, View, StyleSheet, TextInput, Pressable} from 'react-native';
 
 const TaskDetail = (props) => {
   const {syringe, task, tasks, setTasks, index} = props.route.params;

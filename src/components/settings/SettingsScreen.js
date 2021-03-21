@@ -29,14 +29,6 @@ const SettingsScreen = ({config, setConfig}) => {
     }
   };
 
-  const getContainersNum = () => {
-    if (isNaN(changes.containersNum)) {
-      return '';
-    } else {
-      return changes.containersNum.toString();
-    }
-  };
-
   const getDelay = () => {
     if (isNaN(changes.delay)) {
       return '';
@@ -63,11 +55,6 @@ const SettingsScreen = ({config, setConfig}) => {
     let newChange = [...config.syringesSetPoint];
     newChange[syringe] = parseInt(text, 10);
     setChanges({...changes, syringesSetPoint: newChange});
-  };
-
-  const handleContainerNum = (text) => {
-    let newChange = parseInt(text, 10);
-    setChanges({...changes, containersNum: newChange});
   };
 
   const handleStepsPerCm = (coord, text) => {
@@ -134,9 +121,7 @@ const SettingsScreen = ({config, setConfig}) => {
             <Text style={styles.titleText}>Calibración del inyector</Text>
           </View>
           <View style={styles.sectionBody}>
-            <Text style={styles.subHeader}>
-              Setpoint de las jeringas (pasos)
-            </Text>
+            <Text style={styles.subHeader}>Setpoint del émbolo (pasos)</Text>
             <View style={styles.confInline}>
               <TextInput
                 style={[styles.textInput]}
@@ -153,14 +138,6 @@ const SettingsScreen = ({config, setConfig}) => {
                 onChangeText={(text) => handleSyringeSetPoint(1, text)}
               />
             </View>
-            <Text style={styles.subHeader}>Número de contenedores</Text>
-            <TextInput
-              style={[styles.textInput]}
-              value={getContainersNum()}
-              keyboardType="decimal-pad"
-              placeholder="Número de contenedores"
-              onChangeText={(text) => handleContainerNum(text)}
-            />
             <Text style={styles.subHeader}>Pasos por centímetro:</Text>
             <View style={styles.confInline}>
               <TextInput
@@ -232,8 +209,8 @@ const styles = StyleSheet.create({
   sectionTitle: {
     minWidth: 180,
     color: 'white',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
+    borderTopLeftRadius: 6,
+    borderTopRightRadius: 6,
     backgroundColor: '#1E0B7E',
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -246,8 +223,8 @@ const styles = StyleSheet.create({
   },
   sectionBody: {
     backgroundColor: '#ededed',
-    borderBottomRightRadius: 12,
-    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 6,
+    borderBottomLeftRadius: 6,
     paddingVertical: 10,
     paddingHorizontal: 10,
   },
@@ -257,7 +234,7 @@ const styles = StyleSheet.create({
   textInput: {
     backgroundColor: '#f7f7f7',
     marginHorizontal: 5,
-    borderRadius: 10,
+    borderRadius: 5,
     flex: 1,
     height: 35,
     fontSize: 12,

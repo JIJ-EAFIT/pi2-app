@@ -28,8 +28,11 @@ const BluetoothButtonConnected = ({handlePress}) => {
       onPress={handlePress}
       style={({pressed}) => [
         styles.bluetoothButton,
-        {backgroundColor: pressed ? '#5db359' : '#65C161'},
-      ]}>
+        {backgroundColor: '#65C161'},
+      ]}
+      android_ripple={{
+        color: '#5db359',
+      }}>
       <Text style={styles.bluetoothText}>WiFi conectado</Text>
       <Image
         style={styles.tickImage}
@@ -44,10 +47,10 @@ const BluetoothButtonNotConnected = ({loading, handlePress}) => {
   return (
     <Pressable
       onPress={handlePress}
-      style={({pressed}) => [
-        styles.bluetoothButton,
-        {backgroundColor: pressed ? '#d65a5a' : '#F26464'},
-      ]}>
+      style={styles.bluetoothButton}
+      android_ripple={{
+        color: '#d65a5a',
+      }}>
       <Text style={styles.bluetoothText}>WiFi desconectado</Text>
       {loading ? (
         <ActivityIndicator color="#9a0808" />
@@ -64,7 +67,7 @@ const BluetoothButtonNotConnected = ({loading, handlePress}) => {
 
 const styles = StyleSheet.create({
   bluetoothButton: {
-    backgroundColor: '#65C161',
+    backgroundColor: '#F26464', //'#65C161',
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 15,
@@ -72,6 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 15,
     elevation: 5,
+    overflow: 'hidden',
   },
   bluetoothText: {fontSize: 16, color: '#2E2E2E'},
   tickImage: {

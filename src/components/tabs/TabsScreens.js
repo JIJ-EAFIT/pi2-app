@@ -11,9 +11,8 @@ const Tabs = createBottomTabNavigator();
 const TabsScreens = () => {
   const initialConfig = {
     webserverUrl: 'http://192.168.4.1/',
-    syringesMax: [10, 15],
+    syringesMax: [2, 3],
     syringesSetPoint: [20, 0],
-    containersNum: 10,
     delay: 3000,
     stepsPerCm: {x: 15, y: 35, z: 35},
   };

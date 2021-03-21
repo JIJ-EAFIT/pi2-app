@@ -64,7 +64,8 @@ const MainScreen = ({config}) => {
 
   const handleRun = () => {
     setExec(true);
-    onSend();
+    onSend(tasks, syringe, config);
+    setExec(false);
   };
 
   return (
@@ -102,8 +103,11 @@ const MainScreen = ({config}) => {
             />
           )}
         />
-        <Pressable style={styles.addButton} onPress={handleAdd}>
-          <Text style={styles.addButtonText}>Añadir Otro</Text>
+        <Pressable
+          style={styles.addButton}
+          onPress={handleAdd}
+          android_ripple={{color: '#180866'}}>
+          <Text style={styles.addButtonText}>Añadir otra</Text>
         </Pressable>
       </View>
     </View>

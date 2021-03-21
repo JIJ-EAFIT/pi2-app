@@ -54,8 +54,7 @@ const Commands = ({config}) => {
     setCent(!cent);
   };
 
-  const sendCommands = () => {
-  }
+  const sendCommands = () => {};
 
   return (
     <>
