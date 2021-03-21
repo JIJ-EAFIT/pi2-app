@@ -7,7 +7,6 @@ import {
   FlatList,
   LogBox,
 } from 'react-native';
-import BluetoothButton from './BluetoothButton';
 import RunButton from './RunButton';
 import SyringeButton from './SyringeButton';
 import EmptyList from './EmptyList';
@@ -70,11 +69,6 @@ const MainScreen = ({config}) => {
 
   return (
     <View style={styles.mainWrapper}>
-      <BluetoothButton
-        loading={btLoading}
-        connected={btConnected}
-        handlePress={handleBluetoothPress}
-      />
       <View style={styles.processWrapper}>
         <View style={styles.processOptions}>
           <RunButton
@@ -125,7 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#E2E2E2',
     paddingHorizontal: 12,
-    paddingTop: 5,
+    paddingTop: 10,
     paddingBottom: 15,
     borderRadius: 12,
   },
