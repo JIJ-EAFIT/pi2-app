@@ -21,25 +21,14 @@ LogBox.ignoreLogs([
 const MainScreen = ({config}) => {
   const navigation = useNavigation();
 
-  const initialTasks = [{from: 0, to: 2, quantity: 0}];
+  const initialTasks = [
+    {from: 0, to: 2, quantity: 1.4, done: false},
+    {from: 0, to: 2, quantity: 1.4, done: false},
+  ];
 
   const [syringe, setSyringe] = useState(config.syringesMax[0]);
   const [tasks, setTasks] = useState(initialTasks);
   const [exec, setExec] = useState(false);
-  const [btLoading, setbtLoading] = useState(false);
-  const [btConnected, setbtConnected] = useState(false);
-
-  const handleBluetoothPress = () => {
-    if (btConnected) {
-      setbtConnected(false);
-    } else {
-      setbtLoading(true);
-      setTimeout(() => {
-        setbtLoading(false);
-        setbtConnected(true);
-      }, 1500);
-    }
-  };
 
   const handleEdit = (task, index) => {
     navigation.navigate('Editar actividad', {

@@ -86,6 +86,14 @@ const SettingsScreen = ({config, setConfig}) => {
     <>
       <ScrollView style={styles.mainWrapper}>
         <View style={styles.sectionItem}>
+          <View style={[styles.sectionTitle, styles.sectionTitleCommand]}>
+            <Text style={styles.titleText}>Envío de comandos</Text>
+          </View>
+          <View style={styles.sectionBody}>
+            <Commands config={config} />
+          </View>
+        </View>
+        <View style={styles.sectionItem}>
           <View style={styles.sectionTitle}>
             <Text style={styles.titleText}>Aplicación</Text>
           </View>
@@ -172,16 +180,8 @@ const SettingsScreen = ({config, setConfig}) => {
             />
           </View>
         </View>
-        <View style={styles.sectionItem}>
-          <View style={[styles.sectionTitle, styles.sectionTitleCommand]}>
-            <Text style={styles.titleText}>Enviar comandos</Text>
-          </View>
-          <View style={styles.sectionBody}>
-            <Commands config={config} />
-          </View>
-        </View>
       </ScrollView>
-      {!verifyChange() ? (
+      {!verifyChange() && (
         <Pressable onPress={applyChanges} style={styles.applyButton}>
           <Image
             style={styles.tick}
@@ -189,7 +189,7 @@ const SettingsScreen = ({config, setConfig}) => {
             resizeMode="contain"
           />
         </Pressable>
-      ) : null}
+      )}
     </>
   );
 };
@@ -199,7 +199,8 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 8,
     paddingHorizontal: 15,
-    paddingBottom: 15,
+    paddingBottom: 20,
+    marginBottom: 20,
     backgroundColor: 'white',
   },
   sectionItem: {

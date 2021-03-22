@@ -1,116 +1,91 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {Picker} from '@react-native-picker/picker';
 import {
-  View,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   Pressable,
   Image,
+  View,
+  Alert,
 } from 'react-native';
 
 const Commands = ({config}) => {
-  const [coords, setCoords] = useState({x: NaN, y: NaN, z: NaN});
-  const [cent, setCent] = useState(false);
+  const [coord, setCoord] = useState();
+  const [steps, setSteps] = useState('');
 
-  const getUnit = (coord) => (cent ? 'cm' : 'Pasos');
-  const getCoord = (coord) => {
-    if (isNaN(coords[coord])) {
-      return '';
-    } else {
-      return coords[coord].toString();
-    }
-  };
-
-  const handleCoord = (text, coord) => {
-    console.log(text);
-    let tempCoords = {...coords};
-
-    if (cent) {
-      tempCoords[coord] = text;
-    } else {
-      tempCoords[coord] = parseInt(text, 10);
-    }
-    setCoords(tempCoords);
-  };
-
-  const handleUnitSwitch = () => {
-    let newCoords = {...coords};
-    if (cent) {
-      for (const coord in newCoords) {
-        let centValue = parseFloat(newCoords[coord]);
-        newCoords[coord] = Math.round(centValue * config.stepsPerCm[coord]);
-      }
-    } else {
-      for (const coord in newCoords) {
-        newCoords[coord] = (
-          newCoords[coord] / config.stepsPerCm[coord]
-        ).toFixed(2);
+  const sendCommands = () => {
+    console.log('sending...');
+    if (!isNaN(steps)) {
+      let parsedSteps = parseInt(steps, 10);
+      if (parsedSteps > -32000 && parsedSteps < 32000) {
+        Alert.alert(
+          'Valor fuera de los límites',
+          'El valor de pasos tiene que estar entre -32000 y 32000',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                setSteps('');
+              },
+            },
+          ],
+        );
       }
     }
-    setCoords(newCoords);
-    setCent(!cent);
+    let sendUrl = `${config.webserverUrl}${coord}/${steps}`;
+    fetch(sendUrl);
   };
 
-  const sendCommands = () => {};
+  const handleSteps = (text) => {
+    if (text.match(/^-?([0-9]+)?$/)) {
+      setSteps(text);
+    }
+  };
+
+  useEffect(() => {
+    console.log(steps);
+  }, [steps]);
 
   return (
     <>
-      <View style={[styles.confInline, styles.switcherOption]}>
-        <Text style={styles.subHeader}>Medidas en centímetros</Text>
-        <Switch
-          style={styles.switcher}
-          value={cent}
-          onValueChange={handleUnitSwitch}
-        />
+      <View style={styles.confInline}>
+        <Text style={styles.subHeader}>Coordenada</Text>
+        <Text style={styles.subHeader}>N° pasos</Text>
       </View>
       <View style={styles.confInline}>
-        <View style={styles.commandCoord}>
-          <TextInput
-            value={getCoord('x')}
-            style={styles.textInput}
-            placeholder={`X (${getUnit()})`}
-            keyboardType="decimal-pad"
-            onChangeText={(text) => {
-              handleCoord(text, 'x');
-            }}
-          />
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={coord}
+            onValueChange={(itemValue, itemIndex) => setCoord(itemValue)}>
+            <Picker.Item label="x" value="x" />
+            <Picker.Item label="y" value="y" />
+            <Picker.Item label="z" value="z" />
+          </Picker>
         </View>
-        <View style={styles.commandCoord}>
-          <TextInput
-            value={getCoord('y')}
-            style={styles.textInput}
-            placeholder={`Y (${getUnit()})`}
-            keyboardType="decimal-pad"
-            onChangeText={(text) => {
-              handleCoord(text, 'y');
-            }}
-          />
-        </View>
-        <View style={styles.commandCoord}>
-          <TextInput
-            value={getCoord('z')}
-            style={styles.textInput}
-            placeholder={`Z (${getUnit()})`}
-            keyboardType="decimal-pad"
-            onChangeText={(text) => {
-              handleCoord(text, 'z');
-            }}
-          />
-        </View>
-      </View>
-      <Pressable
-        style={({pressed}) => [
-          styles.sendButton,
-          {backgroundColor: pressed ? '#5db359' : '#65C161'},
-        ]}
-        onPress={sendCommands}>
-        <Image
-          style={styles.sendImage}
-          resizeMode="contain"
-          source={require('inyector/src/assets/images/send-arrow.png')}
+        <TextInput
+          value={steps}
+          style={styles.textInput}
+          keyboardType="decimal-pad"
+          onChangeText={handleSteps}
+          placeholder="Pasos"
         />
-      </Pressable>
+      </View>
+      <View style={styles.sendContainer}>
+        <Pressable
+          style={styles.sendButton}
+          android_ripple={{
+            color: '#4a7a48',
+            borderless: true,
+          }}
+          onPress={sendCommands}>
+          <Image
+            style={styles.sendImage}
+            resizeMode="contain"
+            source={require('inyector/src/assets/images/send-arrow.png')}
+          />
+        </Pressable>
+      </View>
     </>
   );
 };
@@ -118,13 +93,14 @@ const Commands = ({config}) => {
 const styles = StyleSheet.create({
   confInline: {
     flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-around',
   },
   commandCoord: {
     flex: 1,
   },
-  coordText: {
-    textAlign: 'center',
-    marginBottom: 8,
+  pickerContainer: {
+    width: '50%',
   },
   textInput: {
     backgroundColor: '#f7f7f7',
@@ -146,19 +122,26 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   sendButton: {
-    marginTop: 12,
-    marginHorizontal: 5,
+    backgroundColor: '#65C161',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     height: 35,
     flexDirection: 'row',
     elevation: 1,
+    borderColor: '#65C161',
   },
   sendImage: {
     width: 30,
     height: 80,
     resizeMode: 'contain',
+  },
+
+  sendContainer: {
+    marginTop: 12,
+    borderRadius: 10,
+    marginHorizontal: 5,
+    borderColor: '#65C161',
   },
 });
 
