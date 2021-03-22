@@ -18,7 +18,7 @@ const Commands = ({config}) => {
     console.log('sending...');
     if (!isNaN(steps)) {
       let parsedSteps = parseInt(steps, 10);
-      if (parsedSteps > -32000 && parsedSteps < 32000) {
+      if (parsedSteps < -32000 || parsedSteps > 32000) {
         Alert.alert(
           'Valor fuera de los límites',
           'El valor de pasos tiene que estar entre -32000 y 32000',
