@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 const Commands = ({config}) => {
-  const [coord, setCoord] = useState();
+  const [coord, setCoord] = useState('x');
   const [steps, setSteps] = useState('');
 
   const sendCommands = () => {
@@ -33,7 +33,7 @@ const Commands = ({config}) => {
         );
       }
     }
-    let sendUrl = `${config.webserverUrl}${coord}/${steps}`;
+    let sendUrl = `${config.webserverUrl}${coord}/${steps}/${config.delay}`;
     fetch(sendUrl);
   };
 
@@ -76,7 +76,8 @@ const Commands = ({config}) => {
           style={styles.sendButton}
           android_ripple={{
             color: '#4a7a48',
-            borderless: true,
+            borderless: false,
+            radius: 150,
           }}
           onPress={sendCommands}>
           <Image

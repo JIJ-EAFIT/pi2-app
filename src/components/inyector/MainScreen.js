@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   FlatList,
   LogBox,
 } from 'react-native';
+import Header from './Header';
 import RunButton from './RunButton';
 import SyringeButton from './SyringeButton';
 import EmptyList from './EmptyList';
@@ -14,34 +15,27 @@ import Task from './Task';
 import {useNavigation} from '@react-navigation/native';
 import onSend from './functions/onSend';
 
-LogBox.ignoreLogs([
-  'Non-serializable values were found in the navigation state',
-]);
+import {configStore} from '../../providers/configStore';
+import {tasksStore} from '../../providers/tasksStore';
 
-const MainScreen = ({config}) => {
+const MainScreen = () => {
   const navigation = useNavigation();
-
-  const initialTasks = [
-    {from: 0, to: 2, quantity: 1.4, done: false},
-    {from: 0, to: 2, quantity: 1.4, done: false},
-  ];
+  const {config} = useContext(configStore);
+  const {tasks, setTasks} = useContext(tasksStore);
 
   const [syringe, setSyringe] = useState(config.syringesMax[0]);
-  const [tasks, setTasks] = useState(initialTasks);
   const [exec, setExec] = useState(false);
 
   const handleEdit = (task, index) => {
     navigation.navigate('Editar actividad', {
-      task,
-      tasks,
-      setTasks,
       syringe,
       index,
+      task,
     });
   };
 
   const handleAdd = () => {
-    navigation.navigate('Añadir actividad', {tasks, setTasks, syringe});
+    navigation.navigate('Añadir actividad', {syringe});
   };
 
   const handleDelete = (index) => {
@@ -58,13 +52,10 @@ const MainScreen = ({config}) => {
 
   return (
     <View style={styles.mainWrapper}>
+      <Header tasks={tasks} setTasks={setTasks} />
       <View style={styles.processWrapper}>
         <View style={styles.processOptions}>
-          <RunButton
-            handleRun={handleRun /*() => onSend(tasks, syringe, config)*/}
-            exec={exec}
-            tasks={tasks}
-          />
+          <RunButton handleRun={handleRun} exec={exec} tasks={tasks} />
           <SyringeButton
             syringe={syringe}
             setSyringe={setSyringe}

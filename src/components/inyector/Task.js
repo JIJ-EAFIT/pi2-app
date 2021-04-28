@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, Pressable, StyleSheet} from 'react-native';
+import {Text, View, Pressable, StyleSheet, Image} from 'react-native';
 
 const Task = ({item, index, handleEdit, handleDelete}) => {
   return (
@@ -12,7 +12,10 @@ const Task = ({item, index, handleEdit, handleDelete}) => {
         <Text style={styles.content}>{`${item.quantity} mL`}</Text>
         <View style={styles.deleteTask}>
           <Pressable onPress={handleDelete} style={styles.deletePress}>
-            <Text style={styles.deleteCross}>x</Text>
+            <Image
+              style={styles.deleteCross}
+              source={require('../../assets/images/unsuccess.png')}
+            />
           </Pressable>
         </View>
       </View>
@@ -30,7 +33,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginHorizontal: 5,
     borderRadius: 10,
-    marginVertical: 4,
+    marginVertical: 3,
     elevation: 1,
   },
   left: {},
@@ -42,18 +45,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   deleteTask: {
-    bottom: 10,
-    left: 5,
-    paddingHorizontal: 3,
+    paddingHorizontal: 2,
   },
   deletePress: {
-    paddingHorizontal: 3,
-    marginVertical: 2,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 6,
   },
   deleteCross: {
-    color: '#9a0808',
+    resizeMode: 'contain',
+    height: 10,
+    width: 10,
   },
 });
 

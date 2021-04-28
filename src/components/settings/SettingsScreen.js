@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import Commands from './Commands';
 import {
   View,
@@ -10,69 +10,11 @@ import {
   Image,
 } from 'react-native';
 
-const SettingsScreen = ({config, setConfig}) => {
+import {configStore} from '../../providers/configStore';
+
+const SettingsScreen = ({setConfig}) => {
+  const {config, dispatch} = useContext(configStore);
   const [changes, setChanges] = useState({...config});
-
-  const getSyringeValue = (index) => {
-    if (isNaN(changes.syringesMax[index])) {
-      return '';
-    } else {
-      return changes.syringesMax[index].toString();
-    }
-  };
-
-  const getSyringeSetPoint = (index) => {
-    if (isNaN(changes.syringesSetPoint[index])) {
-      return '';
-    } else {
-      return changes.syringesSetPoint[index].toString();
-    }
-  };
-
-  const getDelay = () => {
-    if (isNaN(changes.delay)) {
-      return '';
-    } else {
-      return changes.delay.toString();
-    }
-  };
-
-  const getStepsPerCm = (coord) => {
-    if (isNaN(changes.stepsPerCm[coord])) {
-      return '';
-    } else {
-      return changes.stepsPerCm[coord].toString();
-    }
-  };
-
-  const handleSyringeMax = (syringe, text) => {
-    let newChange = [...config.syringesMax];
-    newChange[syringe] = parseInt(text, 10);
-    setChanges({...changes, syringesMax: newChange});
-  };
-
-  const handleSyringeSetPoint = (syringe, text) => {
-    let newChange = [...config.syringesSetPoint];
-    newChange[syringe] = parseInt(text, 10);
-    setChanges({...changes, syringesSetPoint: newChange});
-  };
-
-  const handleStepsPerCm = (coord, text) => {
-    let newChange = {...config.stepsPerCm};
-    newChange[coord] = parseInt(text, 10);
-    setChanges({...changes, stepsPerCm: newChange});
-  };
-
-  const handleDelay = (text) => {
-    let newChange = parseInt(text, 10);
-    setChanges({...changes, delay: newChange});
-  };
-
-  const handleUrlChange = (text) => {
-    let newChange = {...changes};
-    newChange.webserverUrl = text;
-    setChanges(newChange);
-  };
 
   const verifyChange = () => {
     return JSON.stringify(changes) === JSON.stringify(config) ? true : false;
@@ -102,17 +44,13 @@ const SettingsScreen = ({config, setConfig}) => {
             <View style={styles.confInline}>
               <TextInput
                 style={[styles.textInput]}
-                value={getSyringeValue(0)}
                 keyboardType="decimal-pad"
                 placeholder="Max. mL"
-                onChangeText={(text) => handleSyringeMax(0, text)}
               />
               <TextInput
                 style={styles.textInput}
-                value={getSyringeValue(1)}
                 keyboardType="decimal-pad"
                 placeholder="Max. mL"
-                onChangeText={(text) => handleSyringeMax(1, text)}
               />
             </View>
             <Text style={styles.subHeader}>Dirección del servidor web</Text>
@@ -120,7 +58,6 @@ const SettingsScreen = ({config, setConfig}) => {
               style={styles.textInput}
               value={changes.webserverUrl}
               keyboardType="default"
-              onChangeText={(text) => handleUrlChange(text)}
             />
           </View>
         </View>
@@ -133,50 +70,38 @@ const SettingsScreen = ({config, setConfig}) => {
             <View style={styles.confInline}>
               <TextInput
                 style={[styles.textInput]}
-                value={getSyringeSetPoint(0)}
                 keyboardType="decimal-pad"
                 placeholder="Setpoint (steps)"
-                onChangeText={(text) => handleSyringeSetPoint(0, text)}
               />
               <TextInput
                 style={styles.textInput}
-                value={getSyringeSetPoint(1)}
                 keyboardType="decimal-pad"
                 placeholder="Setpoint (steps)"
-                onChangeText={(text) => handleSyringeSetPoint(1, text)}
               />
             </View>
             <Text style={styles.subHeader}>Pasos por centímetro:</Text>
             <View style={styles.confInline}>
               <TextInput
                 style={[styles.textInput]}
-                value={getStepsPerCm('x')}
                 keyboardType="decimal-pad"
                 placeholder="steps/cm [X]"
-                onChangeText={(text) => handleStepsPerCm('x', text)}
               />
               <TextInput
                 style={styles.textInput}
-                value={getStepsPerCm('y')}
                 keyboardType="decimal-pad"
                 placeholder="steps/cm [Y]"
-                onChangeText={(text) => handleStepsPerCm('y', text)}
               />
               <TextInput
                 style={styles.textInput}
-                value={getStepsPerCm('z')}
                 keyboardType="decimal-pad"
                 placeholder="steps/cm [Z]"
-                onChangeText={(text) => handleStepsPerCm('z', text)}
               />
             </View>
             <Text style={styles.subHeader}>Delay pulsos (μs)</Text>
             <TextInput
               style={[styles.textInput]}
-              value={getDelay()}
               keyboardType="decimal-pad"
               placeholder="Número de contenedores"
-              onChangeText={(text) => handleDelay(text)}
             />
           </View>
         </View>

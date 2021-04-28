@@ -1,99 +1,98 @@
-import React, {useState} from 'react';
-import {Text, View, StyleSheet, TextInput, Pressable} from 'react-native';
+import React, {useState, useContext, useEffect} from 'react';
+import {Text, View, StyleSheet, Pressable} from 'react-native';
+
+import Slider from '@react-native-community/slider';
+import {RNNumberSelector} from 'react-native-number-selector';
+
+import {tasksStore} from '../../providers/tasksStore';
 
 const TaskDetail = (props) => {
-  const {syringe, task, tasks, setTasks, index} = props.route.params;
-  const [state, setState] = useState({
-    from: task.from,
-    to: task.to,
-    quantity: task.quantity,
-  });
+  const {syringe, index, task} = props.route.params;
+  const viales = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-  const handleFrom = (number) => {
-    setState({...state, from: number});
-    console.log(`from: ${number}`);
-  };
+  const {setTasks, tasks} = useContext(tasksStore);
+  const [from, setFrom] = useState(task.from);
+  const [to, setTo] = useState(task.to);
+  const [quantity, setQuantity] = useState(task.quantity);
 
-  const handleTo = (number) => {
-    setState({...state, to: number});
-    console.log(`to: ${number}`);
-  };
+  let setPoint = task.quantity;
 
-  const handleQuantity = (number) => {
-    setState({...state, quantity: number});
-    console.log(`quantity: ${number}`);
-  };
-
-  const isValid = () => {
-    let limits = [0, 10];
-
-    if (state.from >= limits[0] && state.from <= limits[1]) {
-      if (state.to >= limits[0] && state.to <= limits[1]) {
-        if (state.quantity <= syringe && state.quantity > 0) {
-          return true;
-        }
-        return false;
-      }
-      return false;
-    }
-    return false;
-  };
+  useEffect(() => {
+    console.log(`tasks ${JSON.stringify(tasks)}`);
+  }, [tasks]);
 
   const handleSubmit = () => {
-    let copy = [...tasks];
-    let newObj = {
-      from: parseInt(state.from, 10),
-      to: parseInt(state.to, 10),
-      quantity: parseFloat(state.quantity, 10),
-    };
-    copy[index] = newObj;
-    setTasks(copy);
+    let newTasks = [...tasks];
+    newTasks.push({from, to, quantity});
+    setTasks(newTasks);
     props.navigation.goBack();
   };
 
   return (
     <View style={styles.mainWrapper}>
       <Pressable
-        style={styles.saveButton}
+        style={() => [
+          styles.saveButton,
+          {backgroundColor: from === to ? '#4a4a4a' : '#1E0B7E'},
+        ]}
         onPress={handleSubmit}
-        disabled={!isValid()}>
+        disabled={from === to}>
         <Text style={styles.buttonText}>GUARDAR CAMBIOS</Text>
       </Pressable>
       <View style={styles.processWrapper}>
         <Text style={styles.titleText}>Nueva actividad</Text>
-        <View style={styles.fieldsSection}>
-          <View style={styles.left}>
-            <View style={styles.inLine}>
-              <Text style={styles.helperText}>Desde:</Text>
-              <TextInput
-                style={styles.textInputStyle}
-                keyboardType="numeric"
-                onChangeText={handleFrom}
-                value={state.from.toString()}
-                autoFocus={true}
-                placeholder="N° recipiente"
-              />
-            </View>
-            <Text style={styles.helperText}>Hasta:</Text>
-            <TextInput
-              style={styles.textInputStyle}
-              keyboardType="numeric"
-              onChangeText={handleTo}
-              value={state.to.toString()}
-              placeholder="N° recipiente"
-            />
-          </View>
-          <View style={[styles.inLine, styles.right]}>
-            <Text style={styles.helperText}>mL: </Text>
-            <TextInput
-              style={styles.textInputStyle}
-              keyboardType="numeric"
-              onChangeText={handleQuantity}
-              value={state.quantity.toString()}
-              placeholder="Cantidad"
-            />
-          </View>
+        <Text style={styles.helperText}>Desde:</Text>
+        <RNNumberSelector
+          style={styles.selector}
+          items={viales}
+          selectedItem={from}
+          highlightedFontSize={25}
+          fontSize={20}
+          spacing={20}
+          textColor="#345345"
+          highlightedTextColor="#000000"
+          viewAnimation={0}
+          dividerColor="#5c5c5c"
+          dividerThickness={0.4}
+          onChange={(number) => {
+            setFrom(number);
+            console.log(`from: ${from}`);
+          }}
+        />
+        <Text style={styles.helperText}>Hasta:</Text>
+        <RNNumberSelector
+          style={styles.selector}
+          items={viales}
+          selectedItem={to}
+          highlightedFontSize={25}
+          fontSize={20}
+          spacing={20}
+          textColor="#345345"
+          highlightedTextColor="#000000"
+          viewAnimation={0}
+          dividerColor="#5c5c5c"
+          dividerThickness={0.4}
+          onChange={(number) => {
+            setTo(number);
+          }}
+        />
+        <View style={styles.inline}>
+          <Text style={styles.helperText}>mL: </Text>
+          <Text style={styles.quantityText}>{quantity}</Text>
         </View>
+        <Slider
+          style={styles.slider}
+          minimumValue={0}
+          maximumValue={syringe}
+          minimumTrackTintColor="#030067"
+          maximumTrackTintColor="#FFFFFF"
+          thumbTintColor="#030067"
+          value={setPoint}
+          step={0.1}
+          onValueChange={(value) => {
+            setQuantity(value.toFixed(1));
+          }}
+        />
       </View>
     </View>
   );
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 15,
     borderRadius: 12,
-    marginTop: 15,
+    marginTop: 20,
   },
   titleText: {
     color: '#030067',
@@ -161,6 +160,20 @@ const styles = StyleSheet.create({
   right: {
     marginLeft: 8,
     flex: 1,
+  },
+  selector: {left: 0, width: '100%', height: 50, marginVertical: 10},
+  slider: {
+    width: '100%',
+    height: 40,
+  },
+  inline: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  quantityText: {
+    fontSize: 14,
+    color: '#5c5c5c',
+    marginRight: 10,
   },
 });
 
