@@ -13,7 +13,7 @@ const FavsScreen = (props) => {
       <FlatList
         data={favs}
         renderItem={(data) => <FavsItem data={data} />}
-        keyExtractor={(item, key) => key}
+        keyExtractor={(item, key) => key.toString()}
       />
     </View>
   );

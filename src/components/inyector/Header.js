@@ -40,7 +40,6 @@ const Header = () => {
 
   return (
     <View style={styles.container}>
-      {console.log('is fav is:', isFav())}
       <Pressable
         style={styles.favCont}
         onPress={isFav() ? delFav : handleFav}
@@ -102,7 +101,7 @@ const CustomModal = (props) => {
           <Pressable
             style={modal.pressSave}
             onPress={() => {
-              props.setFavs([...props.favs, {name: name, data: props.tasks}]);
+              props.setFavs([...props.favs, {name, data: props.tasks}]);
               props.setVisible(false);
             }}>
             <Text>Guardar</Text>
