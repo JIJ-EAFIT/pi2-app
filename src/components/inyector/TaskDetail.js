@@ -7,15 +7,15 @@ import {RNNumberSelector} from 'react-native-number-selector';
 import {tasksStore} from '../../providers/tasksStore';
 
 const TaskDetail = (props) => {
-  const {syringe, index, task} = props.route.params;
+  const {syringe, idx, task} = props.route.params;
   const viales = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+  let ivalue = task.quantity;
 
   const {setTasks, tasks} = useContext(tasksStore);
   const [from, setFrom] = useState(task.from);
   const [to, setTo] = useState(task.to);
-  const [quantity, setQuantity] = useState(task.quantity);
-
-  let setPoint = task.quantity;
+  var [quantity, setQuantity] = useState(ivalue);
 
   useEffect(() => {
     console.log(`tasks ${JSON.stringify(tasks)}`);
@@ -23,7 +23,7 @@ const TaskDetail = (props) => {
 
   const handleSubmit = () => {
     let newTasks = [...tasks];
-    newTasks.push({from, to, quantity});
+    newTasks.splice(idx, 1, {from, to, quantity});
     setTasks(newTasks);
     props.navigation.goBack();
   };
@@ -78,7 +78,7 @@ const TaskDetail = (props) => {
         />
         <View style={styles.inline}>
           <Text style={styles.helperText}>mL: </Text>
-          <Text style={styles.quantityText}>{quantity}</Text>
+          <Text style={styles.quantityText}>{quantity.toFixed(1)}</Text>
         </View>
         <Slider
           style={styles.slider}
@@ -87,10 +87,10 @@ const TaskDetail = (props) => {
           minimumTrackTintColor="#030067"
           maximumTrackTintColor="#FFFFFF"
           thumbTintColor="#030067"
-          value={setPoint}
+          value={ivalue}
           step={0.1}
           onValueChange={(value) => {
-            setQuantity(value.toFixed(1));
+            setQuantity(value);
           }}
         />
       </View>

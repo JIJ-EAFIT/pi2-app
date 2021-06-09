@@ -13,13 +13,12 @@ const FavsProvider = ({children}) => {
   useEffect(() => {
     persistingStore
       .get('favs')
-      .then((_loaded) => setFavs(_loaded))
+      .then((_loaded) => _loaded && setFavs(_loaded))
       .then(() => setLoaded(true));
   }, []);
 
   useEffect(() => {
     if (loaded) {
-      console.log('favs changed: ', JSON.stringify(favs));
       persistingStore
         .save('favs', favs)
         .then(() => persistingStore.get('favs'))
@@ -28,17 +27,6 @@ const FavsProvider = ({children}) => {
         );
     }
   }, [favs, loaded]);
-
-  // useEffect(() => {
-  //   persistingStore.get('favs').then((loaded) => {
-  //     // console.log('loaded: ', JSON.stringify(loaded));
-
-  //     // Array.isArray(loaded) && loaded.lenght > 0 && setFavs(loaded);
-
-  //     console.log('Se hubiera cargado a favoritos: ');
-  //     console.log(JSON.stringify(loaded));
-  //   });
-  // }, []);
 
   return <Provider value={{favs, setFavs}}>{children}</Provider>;
 };

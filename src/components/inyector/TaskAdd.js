@@ -77,7 +77,7 @@ const TaskAdd = (props) => {
         />
         <View style={styles.inline}>
           <Text style={styles.helperText}>mL: </Text>
-          <Text style={styles.quantityText}>{quantity}</Text>
+          <Text style={styles.quantityText}>{quantity.toFixed(1)}</Text>
         </View>
         <Slider
           style={styles.slider}
@@ -86,10 +86,10 @@ const TaskAdd = (props) => {
           minimumTrackTintColor="#030067"
           maximumTrackTintColor="#FFFFFF"
           thumbTintColor="#030067"
-          value={0}
+          value={tasks.quantity}
           step={0.1}
           onValueChange={(value) => {
-            setQuantity(value.toFixed(1));
+            setQuantity(value);
           }}
         />
       </View>

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   TextInput,
+  Alert,
 } from 'react-native';
 import Modal from 'react-native-modal';
 
@@ -59,7 +60,29 @@ const Header = () => {
         )}
         <Text style={styles.favText}>Favoritos</Text>
       </Pressable>
-      <Pressable style={styles.resCont}>
+      <Pressable
+        style={styles.resCont}
+        onPress={() => {
+          Alert.alert(
+            'Reset de posición',
+            'Está seguro que desea reestablecer la posición de los motores?',
+            [
+              {
+                text: 'Cancelar',
+                onPress: () => {
+                  console.log('No restablecer posiciones');
+                },
+                style: 'cancel',
+              },
+              {
+                text: 'Aceptar',
+                onPress: () => {
+                  console.log('Reestablecer posiciones');
+                },
+              },
+            ],
+          );
+        }}>
         <Image
           source={require('../../assets/images/return.png')}
           style={styles.imReload}

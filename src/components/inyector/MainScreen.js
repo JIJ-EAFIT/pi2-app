@@ -1,12 +1,6 @@
-import React, {useState, useContext} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  FlatList,
-  LogBox,
-} from 'react-native';
+import React, {useState, useContext, useEffect} from 'react';
+import {View, Text, StyleSheet, Pressable, FlatList} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 import Header from './Header';
 import RunButton from './RunButton';
 import SyringeButton from './SyringeButton';
@@ -25,6 +19,13 @@ const MainScreen = () => {
 
   const [syringe, setSyringe] = useState(config.syringesMax[0]);
   const [exec, setExec] = useState(false);
+
+  useEffect(() => {
+    console.log('Hide splash screen');
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 1000);
+  }, []);
 
   const handleEdit = (task, index) => {
     navigation.navigate('Editar actividad', {

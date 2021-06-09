@@ -1,15 +1,20 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MainStack from 'inyector/src/components/inyector/MainStack';
 import SettingsStack from 'inyector/src/components/settings/SettingsStack';
-import InfoStack from 'inyector/src/components/info/InfoStack';
+// import InfoStack from 'inyector/src/components/info/InfoStack';
 
+import KeepAwake from 'react-native-keep-awake';
 import {ConfigProvider} from '../../providers/configStore';
 
 const Tabs = createBottomTabNavigator();
 
 const TabsScreens = () => {
+  useEffect(() => {
+    console.log('Keep awake activado');
+    KeepAwake.activate();
+  });
   return (
     <ConfigProvider>
       <Tabs.Navigator
@@ -20,7 +25,7 @@ const TabsScreens = () => {
           keyboardHidesTabBar: true,
           /* showLabel: false, */
         }}>
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="Información"
           component={InfoStack}
           options={{
@@ -31,7 +36,7 @@ const TabsScreens = () => {
               />
             ),
           }}
-        />
+        /> */}
         <Tabs.Screen
           name="Actividades"
           component={MainStack}

@@ -33,7 +33,8 @@ const Commands = ({config}) => {
         );
       }
     }
-    let sendUrl = `${config.webserverUrl}${coord}/${steps}/${config.delay}`;
+    let sendUrl = `${config.webserverUrl}/${coord}/${steps}/3000`;
+    console.log(sendUrl);
     fetch(sendUrl);
   };
 

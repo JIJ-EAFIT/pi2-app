@@ -9,7 +9,7 @@ const Task = ({item, index, handleEdit, handleDelete}) => {
         <Text>{`Hasta: ${item.to}`}</Text>
       </View>
       <View style={styles.right}>
-        <Text style={styles.content}>{`${item.quantity} mL`}</Text>
+        <Text style={styles.content}>{`${item.quantity.toFixed(1)} mL`}</Text>
         <View style={styles.deleteTask}>
           <Pressable onPress={handleDelete} style={styles.deletePress}>
             <Image
